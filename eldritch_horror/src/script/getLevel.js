@@ -1,26 +1,23 @@
 import ancientsData from '../data/ancients'
-import {cardsData as blueCardsData} from '../data/mythicCards/blue/index'
-import {cardsData as greenCardsData} from '../data/mythicCards/green/index'
-import {cardsData as brownCardsData} from '../data/mythicCards/brown/index'
-
 
 const levelControl = document.querySelector('.level');
 const ancientsBox = document.querySelector('.ancients');
 const ancCard = document.querySelectorAll('.img-anc');
-// const stageBox1 = document.querySelector('.card1');
-// const stageBox2 = document.querySelector('.card2');
-// const stageBox3 = document.querySelector('.card3');
 const stageCircle = document.querySelectorAll('.stage-circle');
 const controlPanel = document.querySelector('.conrtol')
 var CurentObj;
 var cardsArray ={
-        greenCards:0,
-        greenArrCard: [],
-        blueCards:0,
-        blueArrCard:[],
-        brownCards:0,
-        brownArrCard:[],
+        firstStage: [],
+        secondStage:[],
+        thirdStage:[],
+        choseLevel:[],
+        stageArrr:[
+            [],
+            [],
+            [],
+        ]
 }
+
 const levelDiff = {
     first: ['easy','normal'],
     second: ['easy','normal','hard'],
@@ -34,48 +31,131 @@ const getAncients = (event)=>{
         ancCard.forEach((value)=>value.classList.remove('card-active'));
         event.target.classList.add('card-active');
         levelControl.style.opacity = 1;
-        console.log(CurentObj.firstStage)
+        // console.log(CurentObj.firstStage)
     }
-//     // ancientsData.find(elment,index)
 }
 
 const getLevel=(event)=>{
     if(event.target.nodeName !== 'DIV'){
+        var i = 0;
         cardsArray ={
-            greenCards:0,
-            greenArrCard: [],
-            blueCards:0,
-            blueArrCard:[],
-            brownCards:0,
-            brownArrCard:[],
+            firstStage: [],
+            secondStage:[],
+            thirdStage:[],
+            choseLevel:[],
+            stageArrr:[
+                [],
+                [],
+                [],
+            ],
     }
         stageCircle.forEach((value,index)=>{
             var stageLevel = (index<3?'firstStage':(index<6?'secondStage':'thirdStage'))
+            var i = (index<3?0:(index<6?1:2))
             var stageNum = 0;
             switch(index){
                 case 0:
                 case 3:
-                case 6: stageNum = 'greenCards'; cardsArray[stageNum] += CurentObj[stageLevel][stageNum]; break;
+                case 6: stageNum = 'greenCards'; break;
                 case 1:
                 case 4:
-                case 7: stageNum = 'blueCards'; cardsArray[stageNum] += CurentObj[stageLevel][stageNum]; break;
+                case 7: stageNum = 'blueCards'; break;
                 case 2:
                 case 5:
-                case 8: stageNum = 'brownCards'; cardsArray[stageNum] += CurentObj[stageLevel][stageNum]; break;
+                case 8: stageNum = 'brownCards'; break;
             }
             value.innerHTML=CurentObj[stageLevel][stageNum]
-            // console.log(CurentObj[stageLevel])
-            // console.log(CurentObj[stageLevel][stageNum])
+            cardsArray.stageArrr[i].push(CurentObj[stageLevel][stageNum])
         })
+        cardsArray.choseLevel = levelDiff[event.target.className];
+        controlPanel.style.opacity =1;
+        deckBox.style.opacity = 0;
+        deckBtn.style.opacity = 1;
     }
     console.log(cardsArray)
-    controlPanel.style.opacity =1;
 }
+
+
+
+import * as blueCardsData from '../data/mythicCards/blue/index'
+import * as greenCardsData from '../data/mythicCards/green/index'
+import * as brownCardsData from '../data/mythicCards/brown/index'
+
+const colodeBox = document.querySelector('.colodeBox');
+const deckBox = document.querySelector('.deck');
+const deckBtn = document.querySelector('.deckBtn')
+const cardBox = document.querySelector('.mainCard');
+
+
+
+const getColode = ()=>{
+    var fullSuitableBlue = [];
+    var fullSuitableGreen = [];
+    var fullSuitableBrown = [];
+    blueCardsData.default.forEach((element)=>{
+       switch(cardsArray['choseLevel'].length){
+        case 1: if(element.difficulty == cardsArray['choseLevel'][0]){fullSuitableBlue.push(element)};
+            break;
+        case 2: if(element.difficulty == cardsArray['choseLevel'][0] || element.difficulty == cardsArray['choseLevel'][1]){fullSuitableBlue.push(element)};
+            break;
+        case 3: fullSuitableBlue.push(element);
+            break;
+       }
+    })
+    greenCardsData.default.forEach((element)=>{
+        switch(cardsArray['choseLevel'].length){
+         case 1: if(element.difficulty == cardsArray['choseLevel'][0]){fullSuitableGreen.push(element)};
+             break;
+         case 2: if(element.difficulty == cardsArray['choseLevel'][0] || element.difficulty == cardsArray['choseLevel'][1]){fullSuitableGreen.push(element)};
+             break;
+         case 3: fullSuitableGreen.push(element);
+             break;
+        }
+     })
+    brownCardsData.default.forEach((element)=>{
+        switch(cardsArray['choseLevel'].length){
+         case 1: if(element.difficulty == cardsArray['choseLevel'][0]){fullSuitableBrown.push(element)};
+             break;
+         case 2: if(element.difficulty == cardsArray['choseLevel'][0] || element.difficulty == cardsArray['choseLevel'][1]){fullSuitableBrown.push(element)};
+             break;
+         case 3: fullSuitableBrown.push(element);
+             break;
+        }
+     })
+     console.log(fullSuitableGreen,fullSuitableBlue,fullSuitableBrown)
+    cardsArray['stageArrr'].forEach((valueArr,firsIndex)=>{
+        valueArr.forEach((valueIn,index)=>{
+            var stageLevel = (firsIndex==0?'firstStage':(firsIndex==1?'secondStage':'thirdStage'))
+            var stageColorArray = (index==0?fullSuitableGreen:(index==1?fullSuitableBlue:fullSuitableBrown))
+            getElementBuNum(stageLevel,valueIn,stageColorArray)
+        })
+    })
+    
+    console.log(cardsArray)
+    console.log(fullSuitableGreen,fullSuitableBlue,fullSuitableBrown)
+    deckBox.style.opacity = 1;
+    deckBtn.style.opacity = 0;
+
+
+    // cardBox.style.backgroundImage=`url(${blueCardsData.default[0].cardFace})`
+    
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+const getElementBuNum = (stage,number,arrayC)=>{
+    while(number!==0){
+        var newElem = arrayC.splice(getRandomInt(arrayC.length),1);
+        cardsArray[stage].push(newElem);
+        number--;
+    }
+}
+
+
+deckBtn.addEventListener('click',getColode)
 
 
 levelControl.addEventListener('click',getLevel)
 ancientsBox.addEventListener('click',getAncients)
-
-
-// console.log(printStageOne(cthulhu))
-// console.log(ancientsData.find(({id})=>id === 'cthulhu'))

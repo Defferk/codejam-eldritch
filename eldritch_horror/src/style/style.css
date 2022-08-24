@@ -42,7 +42,7 @@
     grid-column: 1/2;
     grid-row: 2/3;
     display: grid;
-    flex-flow: column wrap;
+    flex-flow: row wrap;
     justify-content: center;
     align-items: stretch;
     opacity: 0;
@@ -70,7 +70,7 @@
 
   .stageP{
     text-align: center;
-    color: plum;
+    color: #9ABED2;
   }
 
   .stage-box{
@@ -91,14 +91,14 @@
   }
 
   .green{
-    background-color: green;
+    background-color: #7EC94D;
   }
 
   .blue{
-    background-color: blue;
+    background-color: #57A1C9;
   }
   .brown{
-    background-color: brown;
+    background-color: #C99757;
   }
 
   .deck{
@@ -110,6 +110,35 @@
     grid-area: 2 / 1 / 3 / 3;
 
   }
+
+.deckBtn{
+  opacity: 1;
+  transition: opacity .3s ease-in-out;
+}
+
+.isHidden{
+  opacity: 0;
+}
+
+  .deck{
+    position: relative;
+    width: 130px;
+    height: 190px;
+    background: center/cover, rgba(0, 0, 0, 0.5);
+    background-image: url(../assets/mythicCardBackground.png);
+    transition: opacity .3s ease-in-out;
+  }
+
+  .deck_active{
+    border: 2px solid green;
+    background: center/cover, rgba(0, 35, 10, 0.5);
+  }
+
+  .deck_disable{
+    border: 2px solid rgb(128, 0, 0);
+    background: rgba(35, 0, 0, 0.5);
+  }
+
 
   .mainCard{
     width: 255px;
