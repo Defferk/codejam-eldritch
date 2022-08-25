@@ -1,4 +1,11 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('../assets/fonts/Roboto-Medium.ttf') format('ttf');
+}
+
 * {
+    font-family: 'Roboto';
+    font-size: 16px;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -13,7 +20,7 @@
     display: grid;
     /* gap: ; */
     grid-template-rows: fit-content(40%) 1fr;
-    grid-template-columns: fit-content(50%) 1fr;
+    grid-template-columns: fit-content(60%) auto;
     background:url(../assets/home.png) center/cover, rgba(0, 0, 0, 0.5);
   }
 
@@ -49,6 +56,15 @@
     transition: opacity .3s ease-in-out;
 }
 
+.level input{
+  padding: 5px;
+  margin-bottom: 6px;
+  background-color: aliceblue;
+  border: none;
+  border-radius: 10px;
+  transition: all .3s ease-in-out;
+}
+
 .conrtol{
     padding: 10px;
     grid-column: 2/3;
@@ -71,6 +87,14 @@
   .stageP{
     text-align: center;
     color: #9ABED2;
+    padding-bottom: 5px;
+  }
+
+  .stageP-empty{
+    text-align: center;
+    color: #d29a9a;
+    font-weight: bold;
+    padding-bottom: 5px;
   }
 
   .stage-box{
@@ -114,6 +138,10 @@
 .deckBtn{
   opacity: 1;
   transition: opacity .3s ease-in-out;
+  padding: 5px;
+  background-color: aliceblue;
+  border: none;
+  border-radius: 10px;
 }
 
 .isHidden{
@@ -146,3 +174,10 @@
     background: center/cover, rgba(0, 0, 0, 0.5);
     background-image: none;
   }
+/* 
+  @media screen and (max-width:1200px) {
+    .fullscren{
+      grid-template-rows: fit-content(40%) 1fr;
+      grid-template-columns: fit-content(60%) auto;
+    }
+  } */

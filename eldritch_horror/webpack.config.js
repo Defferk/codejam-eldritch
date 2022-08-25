@@ -43,7 +43,17 @@ module.exports = {
         {
           test: /\.(jpe?g|png|gif|svg)$/i,
           type: "asset",
+          generator: {
+            filename: 'img/[name][ext]'
+          }
         },
+        {
+          test: /\.ttf$/i,
+          type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[name][ext]'
+          }
+        }
       // {
       //   test: /.s?css$/,
       //   use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
