@@ -3,6 +3,8 @@
   src: url('../assets/fonts/Roboto-Medium.ttf') format('ttf');
 }
 
+/* TODO: Курсор на активные */
+
 * {
     font-family: 'Roboto';
     font-size: 16px;
