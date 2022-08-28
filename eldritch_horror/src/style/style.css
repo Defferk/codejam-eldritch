@@ -34,7 +34,7 @@
     flex-flow: row wrap;
     /* width: 400px; */
     gap: 10px;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: center;
 }
 
@@ -176,10 +176,14 @@
     background: center/cover, rgba(0, 0, 0, 0.5);
     background-image: none;
   }
-/* 
+
   @media screen and (max-width:1200px) {
     .fullscren{
-      grid-template-rows: fit-content(40%) 1fr;
-      grid-template-columns: fit-content(60%) auto;
+      grid-template-rows: fit-content(30%) auto;
+      grid-template-columns: 1fr 1fr;
     }
-  } */
+    .img-anc{
+      height: 25vh;
+      width: auto;
+    }
+  }

@@ -26,7 +26,7 @@ var cardsArray ={
             [],
         ]
 }
-const countColor = [0,0,0];
+var countColor = [0,0,0];
 
 const levelDiff = {
     easiest: ['easy'],
@@ -43,13 +43,32 @@ function getRandomInt(max) {
 const getElementBuNum = (stage,number,arrayC)=>{
     while(number!==0){
         var newElem = arrayC.splice(getRandomInt(arrayC.length),1);
-        cardsArray[stage].push(newElem);
+        cardsArray[stage].push(newElem[0]);
         number--;
+
+        // if (newElem.length!==0){
+        //     cardsArray[stage].push(newElem);
+        //     number--;
+        //     console.log('true')
+        // }else{
+        //     var spareElem = spare.splice(getRandomInt(spare.length),1);
+        //     cardsArray[stage].push(spareElem);
+        //     number--;
+        //     console.log('false')
+        // }
+
     }
 }
 
+const bgColorSet = () =>{
+    preInp.style.backgroundColor = 'aliceblue'; 
+    firstInp.style.backgroundColor = 'aliceblue'; 
+    secondInp.style.backgroundColor = 'aliceblue'; 
+    therdInp.style.backgroundColor = 'aliceblue'; 
+    postInp.style.backgroundColor = 'aliceblue'; 
+}
+
 const getAncients = (event)=>{
-    // console.log(event.target.alt)
     if(event.target.nodeName !== 'DIV'){
         CurentObj = ancientsData.find(({id})=>id === event.target.alt);
         ancCard.forEach((value)=>value.classList.remove('card-active'));
@@ -57,25 +76,14 @@ const getAncients = (event)=>{
         levelControl.style.opacity = 1;
         cardBox.style.backgroundImage = 'null';
         controlPanel.style.opacity = 0;
-        //TODO: Отдельная функция на фон
-        preInp.style.backgroundColor = 'aliceblue'; 
-        firstInp.style.backgroundColor = 'aliceblue'; 
-        secondInp.style.backgroundColor = 'aliceblue'; 
-        therdInp.style.backgroundColor = 'aliceblue'; 
-        postInp.style.backgroundColor = 'aliceblue'; 
+        bgColorSet();
         levelControl.addEventListener('click',getLevel)
-        // console.log(CurentObj.firstStage)
     }
 }
 
 const getLevel=(event)=>{
     if(event.target.nodeName !== 'DIV'){
-        //TODO: Отдельная функция на фон
-        preInp.style.backgroundColor = 'aliceblue'; 
-        firstInp.style.backgroundColor = 'aliceblue'; 
-        secondInp.style.backgroundColor = 'aliceblue'; 
-        therdInp.style.backgroundColor = 'aliceblue'; 
-        postInp.style.backgroundColor = 'aliceblue'; 
+        bgColorSet();
         event.target.style.backgroundColor = '#BDED98';
         cardsArray ={
             firstStage: [],
@@ -88,24 +96,27 @@ const getLevel=(event)=>{
                 [],
             ],
         }
+        countColor = [0,0,0];
         stageCircle.forEach((value,index)=>{
             var stageLevel = (index<3?'firstStage':(index<6?'secondStage':'thirdStage'))
-            var i = (index<3?0:(index<6?1:2))
+            var j = (index<3?0:(index<6?1:2))
+            var i = 0;
             var stageNum = 0;
             switch(index){
                 case 0:
                 case 3:
-                case 6: stageNum = 'greenCards'; break;
+                case 6: stageNum = 'greenCards'; i=0; break;
                 case 1:
                 case 4:
-                case 7: stageNum = 'brownCards'; break;
+                case 7: stageNum = 'brownCards'; i=1; break;
                 case 2:
                 case 5:
-                case 8: stageNum = 'blueCards'; break;
+                case 8: stageNum = 'blueCards'; i=2; break;
             }
             value.innerHTML=CurentObj[stageLevel][stageNum]
-            cardsArray.stageArrr[i].push(CurentObj[stageLevel][stageNum])
+            cardsArray.stageArrr[j].push(CurentObj[stageLevel][stageNum])
             countColor[i] += CurentObj[stageLevel][stageNum];
+
         })
         cardsArray.choseLevel = levelDiff[event.target.className];
         controlPanel.style.opacity =1;
@@ -115,9 +126,9 @@ const getLevel=(event)=>{
         if(stageParag[0].className=='stageP-empty'){stageParag.forEach((value)=>{value.className='stageP'})};
         deckBox.style.backgroundImage = 'url(img/mythicCardBackground.png)';
         deckBtn.addEventListener('click',getColode);
-        // console.log(cardsArray)
     }
 }
+
 
 import * as blueCardsData from '../data/mythicCards/blue/index'
 import * as greenCardsData from '../data/mythicCards/green/index'
@@ -127,18 +138,9 @@ const getColode = ()=>{
     var fullSuitableBlue = [];
     var fullSuitableGreen = [];
     var fullSuitableBrown = [];
-    blueCardsData.default.forEach((element)=>{
-       switch(cardsArray['choseLevel'].length){
-        case 1: if(element.difficulty == cardsArray['choseLevel'][0]){fullSuitableBlue.push(element)};
-            break;
-        case 2: if(element.difficulty == cardsArray['choseLevel'][0] || element.difficulty == cardsArray['choseLevel'][1]){fullSuitableBlue.push(element)};
-            break;
-        case 3: fullSuitableBlue.push(element);
-            break;
-       }
-    })
-    // TODO: Добавление нужного уровня сложности при недоборе карт
-    // if(countColor[2]>fullSuitableBlue.length){}
+    var secondLevelBlue = [];
+    var secondLevelGreen = [];
+    var secondLevelBrown = [];
     greenCardsData.default.forEach((element)=>{
         switch(cardsArray['choseLevel'].length){
          case 1: if(element.difficulty == cardsArray['choseLevel'][0]){fullSuitableGreen.push(element)};
@@ -149,7 +151,16 @@ const getColode = ()=>{
              break;
         }
      })
-    brownCardsData.default.forEach((element)=>{
+     if(countColor[0]>fullSuitableGreen.length){
+        greenCardsData.default.forEach((element)=>{
+            if(element.difficulty == 'normal'){secondLevelGreen.push(element)};            
+        })
+        while(countColor[0]>fullSuitableGreen.length){
+            var spareElem = secondLevelGreen.splice(getRandomInt(secondLevelGreen.length),1);
+            fullSuitableGreen.push(spareElem[0]);
+        }
+    }
+     brownCardsData.default.forEach((element)=>{
         switch(cardsArray['choseLevel'].length){
          case 1: if(element.difficulty == cardsArray['choseLevel'][0]){fullSuitableBrown.push(element)};
              break;
@@ -159,8 +170,34 @@ const getColode = ()=>{
              break;
         }
      })
-
-     console.log(fullSuitableGreen,fullSuitableBlue,fullSuitableBrown)
+     if(countColor[1]>fullSuitableBrown.length){
+        brownCardsData.default.forEach((element)=>{
+            if(element.difficulty == 'normal'){secondLevelBrown.push(element)};            
+        })
+        while(countColor[1]>fullSuitableBrown.length){
+            var spareElem = secondLevelBrown.splice(getRandomInt(secondLevelBrown.length),1);
+            fullSuitableBrown.push(spareElem[0]);
+        }
+    }
+    blueCardsData.default.forEach((element)=>{
+       switch(cardsArray['choseLevel'].length){
+        case 1: if(element.difficulty == cardsArray['choseLevel'][0]){fullSuitableBlue.push(element)};
+            break;
+        case 2: if(element.difficulty == cardsArray['choseLevel'][0] || element.difficulty == cardsArray['choseLevel'][1]){fullSuitableBlue.push(element)};
+            break;
+        case 3: fullSuitableBlue.push(element);
+            break;
+       }
+    })
+    if(countColor[2]>fullSuitableBlue.length){
+        blueCardsData.default.forEach((element)=>{
+            if(element.difficulty == 'normal'){secondLevelBlue.push(element)};            
+        })
+        while(countColor[2]>fullSuitableBlue.length){
+            var spareElem = secondLevelBlue.splice(getRandomInt(secondLevelBlue.length),1);
+            fullSuitableBlue.push(spareElem[0]);
+        }
+    }
     cardsArray['stageArrr'].forEach((valueArr,firsIndex)=>{
         valueArr.forEach((valueIn,index)=>{
             var stageLevel = (firsIndex==0?'firstStage':(firsIndex==1?'secondStage':'thirdStage'))
@@ -169,7 +206,6 @@ const getColode = ()=>{
         })
     })
     console.log(cardsArray)
-    console.log(fullSuitableGreen,fullSuitableBlue,fullSuitableBrown)
     deckBox.style.opacity = 1;
     deckBtn.style.opacity = 0;
     deckBtn.removeEventListener('click',getColode)
@@ -181,8 +217,9 @@ const getCardOfColode = ()=>{
     var curentStage = (cardsArray.firstStage.length!==0?'firstStage':(cardsArray.secondStage.length!==0?'secondStage':'thirdStage'))
     if(curentStage=='secondStage'){stageParag[0].className = 'stageP-empty'}else if(curentStage=='thirdStage'){stageParag[1].className = 'stageP-empty'}
     var randomCard = cardsArray[curentStage].splice(getRandomInt(cardsArray[curentStage].length),1);
+    console.log(randomCard)
     var thisCardIndex = (curentStage==='firstStage'?0:(curentStage==='secondStage'?3:6))
-    try{ var thisCardColor = (randomCard[0][0].color==='green'?0:(randomCard[0][0].color==='brown'?1:2))}
+    try{ var thisCardColor = (randomCard[0].color==='green'?0:(randomCard[0].color==='brown'?1:2))}
     catch{
         stageParag[2].className = 'stageP-empty'
         cardBox.style.backgroundImage = 'none'
@@ -190,8 +227,7 @@ const getCardOfColode = ()=>{
         deckBox.removeEventListener('click',getCardOfColode)
     }
     stageCircle[thisCardIndex+thisCardColor].innerHTML-=1;
-    // console.log(randomCard[0][0].cardFace)
-    cardBox.style.backgroundImage=`url(${randomCard[0][0].cardFace})`        
+    cardBox.style.backgroundImage=`url(${randomCard[0].cardFace})`        
 }
 
 
