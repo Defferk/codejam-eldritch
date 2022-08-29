@@ -38,25 +38,13 @@ const levelDiff = {
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
-  }
+}
 
 const getElementBuNum = (stage,number,arrayC)=>{
     while(number!==0){
         var newElem = arrayC.splice(getRandomInt(arrayC.length),1);
         cardsArray[stage].push(newElem[0]);
         number--;
-
-        // if (newElem.length!==0){
-        //     cardsArray[stage].push(newElem);
-        //     number--;
-        //     console.log('true')
-        // }else{
-        //     var spareElem = spare.splice(getRandomInt(spare.length),1);
-        //     cardsArray[stage].push(spareElem);
-        //     number--;
-        //     console.log('false')
-        // }
-
     }
 }
 
@@ -72,11 +60,14 @@ const getAncients = (event)=>{
     if(event.target.nodeName !== 'DIV'){
         CurentObj = ancientsData.find(({id})=>id === event.target.alt);
         ancCard.forEach((value)=>value.classList.remove('card-active'));
-        event.target.classList.add('card-active');
-        levelControl.style.opacity = 1;
-        cardBox.style.backgroundImage = 'null';
-        controlPanel.style.opacity = 0;
         bgColorSet();
+        event.target.classList.add('card-active');
+        levelControl.style.visibility = 'visible';
+        levelControl.style.opacity = 1;
+        cardBox.style.backgroundImage = 'url(img/mainCardBackground.jpg)';
+        controlPanel.style.visibility = 'hidden';
+        deckBtn.style.visibility = 'hidden'
+        controlPanel.style.opacity = 0;
         levelControl.addEventListener('click',getLevel)
     }
 }
@@ -116,13 +107,15 @@ const getLevel=(event)=>{
             value.innerHTML=CurentObj[stageLevel][stageNum]
             cardsArray.stageArrr[j].push(CurentObj[stageLevel][stageNum])
             countColor[i] += CurentObj[stageLevel][stageNum];
-
         })
         cardsArray.choseLevel = levelDiff[event.target.className];
-        controlPanel.style.opacity =1;
+        controlPanel.style.visibility = 'visible';
+        controlPanel.style.opacity = 1;
+        deckBox.style.visibility = 'hidden';
         deckBox.style.opacity = 0;
+        deckBtn.style.visibility = 'visible';
         deckBtn.style.opacity = 1;
-        cardBox.style.backgroundImage = 'none';
+        cardBox.style.backgroundImage = 'url(img/mainCardBackground.jpg)';
         if(stageParag[0].className=='stageP-empty'){stageParag.forEach((value)=>{value.className='stageP'})};
         deckBox.style.backgroundImage = 'url(img/mythicCardBackground.png)';
         deckBtn.addEventListener('click',getColode);
@@ -205,30 +198,30 @@ const getColode = ()=>{
             getElementBuNum(stageLevel,valueIn,stageColorArray)
         })
     })
-    console.log(cardsArray)
+    deckBox.style.visibility = 'visible';
     deckBox.style.opacity = 1;
+    deckBtn.style.visibility = 'hidden';
     deckBtn.style.opacity = 0;
     deckBtn.removeEventListener('click',getColode)
     deckBox.addEventListener('click',getCardOfColode)
-
 }
 
 const getCardOfColode = ()=>{
     var curentStage = (cardsArray.firstStage.length!==0?'firstStage':(cardsArray.secondStage.length!==0?'secondStage':'thirdStage'))
     if(curentStage=='secondStage'){stageParag[0].className = 'stageP-empty'}else if(curentStage=='thirdStage'){stageParag[1].className = 'stageP-empty'}
     var randomCard = cardsArray[curentStage].splice(getRandomInt(cardsArray[curentStage].length),1);
-    console.log(randomCard)
     var thisCardIndex = (curentStage==='firstStage'?0:(curentStage==='secondStage'?3:6))
-    try{ var thisCardColor = (randomCard[0].color==='green'?0:(randomCard[0].color==='brown'?1:2))}
+    try{ var thisCardColor = (randomCard[0].color==='green'?0:(randomCard[0].color==='brown'?1:2))
+        stageCircle[thisCardIndex+thisCardColor].innerHTML-=1;
+        cardBox.style.backgroundImage=`url(${randomCard[0].cardFace})` 
+    }
     catch{
         stageParag[2].className = 'stageP-empty'
-        cardBox.style.backgroundImage = 'none'
-        deckBox.style.backgroundImage = 'none'
+        cardBox.style.backgroundImage = 'url(img/mainCardBackground.jpg)'
+        deckBox.style.visibility = 'hidden'
+        deckBox.style.opacity = 0;
         deckBox.removeEventListener('click',getCardOfColode)
     }
-    stageCircle[thisCardIndex+thisCardColor].innerHTML-=1;
-    cardBox.style.backgroundImage=`url(${randomCard[0].cardFace})`        
 }
-
 
 ancientsBox.addEventListener('click',getAncients)

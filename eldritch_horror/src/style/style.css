@@ -1,9 +1,9 @@
 @font-face {
-  font-family: 'Roboto';
-  src: url('../assets/fonts/Roboto-Medium.ttf') format('ttf');
-}
-
-/* TODO: Курсор на активные */
+  font-family: Roboto;
+  src: url("../assets/fonts/Roboto-Medium.woff2?v=2.137") format("woff2"), 
+  url("../assets/fonts/Roboto-Medium.woff?v=2.137") format("woff");
+  font-weight: 500;
+  font-style: normal; }
 
 * {
     font-family: 'Roboto';
@@ -23,7 +23,7 @@
     /* gap: ; */
     grid-template-rows: fit-content(40%) 1fr;
     grid-template-columns: fit-content(60%) auto;
-    background:url(../assets/home.png) center/cover, rgba(0, 0, 0, 0.5);
+    background:url(../assets/home.jpg) center/cover, rgba(0, 0, 0, 0.5);
   }
 
   .ancients{
@@ -32,13 +32,13 @@
     padding: 10px;
     display: flex;
     flex-flow: row wrap;
-    /* width: 400px; */
     gap: 10px;
     justify-content: space-around;
     align-items: center;
 }
 
 .img-anc{
+  cursor: pointer;
   height: 35vh;
   width: auto;
 }
@@ -54,17 +54,23 @@
     flex-flow: row wrap;
     justify-content: center;
     align-items: stretch;
+    visibility: hidden;
     opacity: 0;
     transition: opacity .3s ease-in-out;
 }
 
 .level input{
-  padding: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
   margin-bottom: 6px;
-  background-color: aliceblue;
+  background-color: #f0f8ff;
   border: none;
   border-radius: 10px;
   transition: all .3s ease-in-out;
+}
+
+.level input:hover{
+ color: #96A5B3;
 }
 
 .conrtol{
@@ -76,8 +82,9 @@
     grid-template-columns: repeat(2,auto);
     align-items: center;
     justify-items: center;
+    visibility: hidden;
     opacity: 0;
-    transition: opacity .3s ease-in-out;
+    transition: opacity .3s ease-in-out,visibility 1s;
   }
 
   .stage{
@@ -138,9 +145,10 @@
   }
 
 .deckBtn{
+  cursor: pointer;
   opacity: 1;
-  transition: opacity .3s ease-in-out;
-  padding: 5px;
+  transition: opacity .3s ease-in-out, visibility 1s;
+  padding: 5px 10px;
   background-color: aliceblue;
   border: none;
   border-radius: 10px;
@@ -151,12 +159,18 @@
 }
 
   .deck{
+    cursor: cell;
     position: relative;
     width: 130px;
     height: 190px;
     background: center/cover, rgba(0, 0, 0, 0.5);
     background-image: url(../assets/mythicCardBackground.png);
-    transition: opacity .3s ease-in-out;
+    transition: opacity .3s ease-in-out, border .1s linear, box-shadow .1s cubic-bezier(0, 0.32, 0, 1.02);
+  }
+
+  .deck:active{
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 5px 8px rgba(230, 244, 248, 0.25);
   }
 
   .deck_active{
@@ -173,8 +187,11 @@
   .mainCard{
     width: 255px;
     height: 381px;
+    border: none;
+    border-radius: 10px;
     background: center/cover, rgba(0, 0, 0, 0.5);
-    background-image: none;
+    background-image: url(../assets/mainCardBackground.jpg);
+    transition: background-image .5s ease-in-out ;
   }
 
   @media screen and (max-width:1200px) {

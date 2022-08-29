@@ -20,8 +20,6 @@ module.exports = {
     new HtmlWebpackPlugin({
         template: path.resolve(__dirname,'src','index.html'),
         inject: 'body',
-        // publicPath: 'dist',
-        // minify: false
     }),
     new MiniCssExtractPlugin({
       filename: 'main.[contenthash].css'
@@ -48,22 +46,16 @@ module.exports = {
           }
         },
         {
-          test: /\.ttf$/i,
+          test: /\.woff2?$/i,
           type: 'asset/resource',
           generator: {
             filename: 'fonts/[name][ext]'
           }
         }
-      // {
-      //   test: /.s?css$/,
-      //   use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
-      // },
     ],
   },
   optimization: {
     minimizer: [
-      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-      // `...`,
       new CssMinimizerPlugin(),
     ],
     },
